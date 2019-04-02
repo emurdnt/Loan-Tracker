@@ -66,6 +66,17 @@ Loan.prototype.get = function (attr) {
 
 Loan.prototype.payment = function () {
   return this.principal * this.rate / 12 / (1 - Math.pow(1 + this.rate / 12, -this.term * 12));
+};
+/** 
+ * Calculate the monthly payment of a loan
+ * @function
+ * @name payment
+ * @returns {Number} the monthly payment amount
+ */
+
+
+Loan.prototype.cost = function () {
+  return this.payment() * this.term * 12 - this.principal;
 }; // export Loan for global useage
 
 
