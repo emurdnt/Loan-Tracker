@@ -3,6 +3,7 @@ import Loan from './loan.js';
 
 //part A - Day 1
 import LoanList from './loan-list.js';
+import LoanForm from './loan-form.js';
 let loans=[
     new Loan({
         title:'Loan X'
@@ -20,4 +21,9 @@ let loans=[
 ReactDOM.render(
     <LoanList loans={loans}/>,
     document.querySelector('.loan-display')
+);
+
+ReactDOM.render(
+    <LoanForm />,
+    document.querySelector('.loan-control')
 );

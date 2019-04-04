@@ -2,6 +2,7 @@ import Events from './events.js';
 import Loan from './loan.js'; //part A - Day 1
 
 import LoanList from './loan-list.js';
+import LoanForm from './loan-form.js';
 var loans = [new Loan({
   title: 'Loan X'
 }), new Loan({
@@ -12,3 +13,4 @@ var loans = [new Loan({
 ReactDOM.render(React.createElement(LoanList, {
   loans: loans
 }), document.querySelector('.loan-display'));
+ReactDOM.render(React.createElement(LoanForm, null), document.querySelector('.loan-control'));
