@@ -29,7 +29,9 @@ function (_React$Component) {
     _classCallCheck(this, LoanForm);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(LoanForm).call(this, props));
-    _this.state = {
+    _this.state = _this.props.loan ? {
+      loan: _this.props.loan
+    } : {
       loan: new Loan()
     };
     _this.handleReset = _this.handleReset.bind(_assertThisInitialized(_assertThisInitialized(_this)));
@@ -41,13 +43,24 @@ function (_React$Component) {
   _createClass(LoanForm, [{
     key: "handleReset",
     value: function handleReset() {
-      console.log('reset..');
+      //higher level reset for the app
+      this.props.resetListener(); //local reset
+
+      this.setState({
+        loan: new Loan()
+      });
     }
   }, {
     key: "handleSubmit",
     value: function handleSubmit(evt) {
       evt.preventDefault();
-      console.log('submitted..');
+      this.props.submitListener({
+        //form field validation here
+        title: this.state.loan.title,
+        principal: this.state.loan.principal,
+        rate: this.state.loan.rate,
+        term: this.state.loan.term
+      });
     }
   }, {
     key: "handleChange",
@@ -74,6 +87,10 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
+      if (this.props.loan && this.props.loan !== this.state.loan) {
+        this.state.loan = this.props.loan;
+      }
+
       var payment = this.state.loan.payment().toFixed(2);
       var cost = this.state.loan.cost().toFixed(2);
       return React.createElement("div", null, React.createElement("h3", null, "Loan Entry"), React.createElement("form", {
@@ -136,7 +153,7 @@ function (_React$Component) {
       }, React.createElement("label", null, "Payment"), React.createElement("span", {
         className: "loan-payment",
         id: "loan-payment"
-      }, "$", payment), React.createElement("label", null, "Cost"), React.createElement("span", {
+      }, "$", payment), React.createElement("br", null), React.createElement("label", null, "Cost"), React.createElement("span", {
         className: "loan-cost",
         id: "loan-cost"
       }, "$", cost)), React.createElement("button", {

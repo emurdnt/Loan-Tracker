@@ -4,20 +4,32 @@ class LoanForm extends React.Component{
     constructor(props){
         super(props);
 
-        this.state={
-            loan:new Loan()
-        };
+        this.state=(this.props.loan)?{
+            loan:this.props.loan
+         }:{
+             loan:new Loan()
+         }
 
         this.handleReset = this.handleReset.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
     }
     handleReset(){
-        console.log('reset..');
+        //higher level reset for the app
+        this.props.resetListener();
+
+        //local reset
+        this.setState({ loan: new Loan() });
     }
     handleSubmit(evt){
         evt.preventDefault();
-        console.log('submitted..');
+        this.props.submitListener({
+            //form field validation here
+            title: this.state.loan.title,
+            principal: this.state.loan.principal,
+            rate: this.state.loan.rate,
+            term: this.state.loan.term
+        });
     }
     handleChange(evt){
         // this.state.loan.set(evt.target.name,evt.target.value);
@@ -37,8 +49,14 @@ class LoanForm extends React.Component{
         });
     }
     render(){
+
+        if( this.props.loan && this.props.loan !==this.state.loan){
+            this.state.loan = this.props.loan;
+        }
+
         const payment = this.state.loan.payment().toFixed(2);
         const cost = this.state.loan.cost().toFixed(2);
+
         return(
             <div>
                   <h3>Loan Entry</h3>
@@ -69,6 +87,7 @@ class LoanForm extends React.Component{
                         <div className="form-group">
                             <label>Payment</label>
                             <span className="loan-payment" id="loan-payment">${payment}</span>
+                            <br/>
 							<label >Cost</label>
                             <span className="loan-cost" id="loan-cost">${cost}</span>
                         </div>

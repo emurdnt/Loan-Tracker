@@ -35,14 +35,14 @@ function (_React$Component) {
   _createClass(LoanList, [{
     key: "handleClick",
     value: function handleClick(evt) {
-      console.log("Loan at idx ".concat(evt.target.dataset.idx, " clicked"));
+      this.props.clickListener(+evt.target.dataset.idx);
     }
   }, {
     key: "render",
     value: function render() {
       var _this2 = this;
 
-      return !this.props.loans || this.props.loans.length == 0 ? React.createElement("div", null, React.createElement("div", {
+      return !this.props.loans || this.props.loans.length == 0 ? React.createElement("div", null, React.createElement("h3", null, "Loan List"), React.createElement("div", {
         className: "list-group"
       }, React.createElement("button", {
         type: "button",

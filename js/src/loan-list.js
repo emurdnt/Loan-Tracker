@@ -5,11 +5,12 @@ class LoanList extends React.Component {
         this.handleClick = this.handleClick.bind(this);
     }
     handleClick(evt){
-        console.log(`Loan at idx ${evt.target.dataset.idx} clicked`)
+        this.props.clickListener(+evt.target.dataset.idx);
     }
     render(){
         return !this.props.loans||this.props.loans.length==0?(
             <div>
+                <h3>Loan List</h3>
                 <div className="list-group">
                     <button type="button" className="list-group-item" > NO LOANS ENTERED</button>
                 </div>
