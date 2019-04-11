@@ -1,103 +1,66 @@
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
 
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+function _readOnlyError(name) { throw new Error("\"" + name + "\" is read-only"); }
 
 import Events from './events.js';
 import Loan from './loan.js'; //part A - Day 1
 
 import LoanList from './loan-list.js';
-import LoanForm from './loan-form.js'; //part A-Day 3
+import LoanForm from './loan-form.js';
 
-var App =
-/*#__PURE__*/
-function (_React$Component) {
-  _inherits(App, _React$Component);
+function App(props) {
+  var _useState = useState([]),
+      _useState2 = _slicedToArray(_useState, 2),
+      loans = _useState2[0],
+      addLoans = _useState2[1];
 
-  function App(props) {
-    var _this;
+  var _useState3 = useState(undefined),
+      _useState4 = _slicedToArray(_useState3, 2),
+      currentLoan = _useState4[0],
+      setCurrentLoan = _useState4[1];
 
-    _classCallCheck(this, App);
+  var pickLoan = function pickLoan(idx) {
+    setCurrentLoan(loans[idx]);
+  };
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(App).call(this, props));
-    _this.pickLoan = _this.pickLoan.bind(_assertThisInitialized(_assertThisInitialized(_this)));
-    _this.clearLoan = _this.clearLoan.bind(_assertThisInitialized(_assertThisInitialized(_this)));
-    _this.saveLoan = _this.saveLoan.bind(_assertThisInitialized(_assertThisInitialized(_this)));
-    _this.state = {
-      loans: [],
-      currentLoan: undefined
-    };
-    return _this;
-  }
+  var clearLoan = function clearLoan() {
+    setCurrentLoan(undefined);
+  };
 
-  _createClass(App, [{
-    key: "pickLoan",
-    value: function pickLoan(idx) {
-      this.setState({
-        currentLoan: this.state.loans[idx]
-      });
-    }
-  }, {
-    key: "clearLoan",
-    value: function clearLoan() {
-      this.setState({
-        currentLoan: undefined
-      });
-    }
-  }, {
-    key: "saveLoan",
-    value: function saveLoan(loanDetails) {
-      var curr = null;
+  var saveLoan = function saveLoan(loanDetails) {
+    var curr = null;
 
-      if (!this.state.currentLoan) {
-        curr = new Loan(loanDetails);
-        this.setState({
-          loans: this.state.loans.concat(curr)
-        });
-      } else {
-        curr = this.state.currentLoan;
-        curr.set('title', loanDetails.title);
-        curr.set('principal', loanDetails.principal);
-        curr.set('rate', loanDetails.rate);
-        curr.set('term', loanDetails.term);
-      }
+    if (!setCurrentLoan(loans[idx])) {
+      curr = new Loan(loanDetails);
+      loans = (_readOnlyError("loans"), addLoans(loans.concat(curr)));
+    } else {
+      curr = currentLoan;
+      curr.set('title', loanDetails.title);
+      curr.set('principal', loanDetails.principal);
+      curr.set('rate', loanDetails.rate);
+      curr.set('term', loanDetails.term);
+    } //currentLoan = useState(curr);
 
-      this.setState({
-        currentLoan: curr
-      });
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      return React.createElement("div", null, React.createElement("div", {
-        className: "col-sm-6 col-xs-12 loan-control"
-      }, React.createElement(LoanForm, {
-        submitListener: this.saveLoan,
-        resetListener: this.clearLoan,
-        loan: this.state.currentLoan
-      })), React.createElement("div", {
-        className: "col-sm-6 col-xs-12 loan-display"
-      }, React.createElement(LoanList, {
-        clickListener: this.pickLoan,
-        loans: this.state.loans
-      })));
-    }
-  }]);
+  };
 
-  return App;
-}(React.Component);
+  return React.createElement("div", null, React.createElement("div", {
+    className: "col-sm-6 col-xs-12 loan-control"
+  }, React.createElement(LoanForm, {
+    submitListener: saveLoan,
+    resetListener: clearLoan,
+    loan: currentLoan
+  })), React.createElement("div", {
+    className: "col-sm-6 col-xs-12 loan-display"
+  }, React.createElement(LoanList, {
+    clickListener: pickLoan,
+    loans: loans
+  })));
+}
 
 ReactDOM.render(React.createElement(App, null), document.querySelector('.app-display'));

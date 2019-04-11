@@ -5,58 +5,43 @@ import Loan from './loan.js';
 import LoanList from './loan-list.js';
 import LoanForm from './loan-form.js';
 
-//part A-Day 3
-class App extends React.Component{
-    constructor(props){
-        super(props);
+function App(props){
+    const[loans, addLoans] = useState([]);
+    const[currentLoan,setCurrentLoan] = useState(undefined);
 
-        this.pickLoan = this.pickLoan.bind(this);
-        this.clearLoan = this.clearLoan.bind(this);
-        this.saveLoan = this.saveLoan.bind(this);
-        this.state={
-            loans:[],
-            currentLoan:undefined
-        }
+    const pickLoan = (idx) =>{
+        setCurrentLoan(loans[idx]);
     }
-    pickLoan(idx){
-        this.setState({
-            currentLoan:this.state.loans[idx]
-        });
-    }
-    clearLoan(){
-        this.setState({
-            currentLoan:undefined
-        });
-    }
-    saveLoan(loanDetails){
-        let curr = null;
 
-        if(!this.state.currentLoan){
-            curr = new Loan(loanDetails);
-            this.setState({
-                loans:this.state.loans.concat(curr)
-            })
-        }
-        else{
-            curr = this.state.currentLoan;
-            curr.set( 'title', loanDetails.title);
-            curr.set( 'principal', loanDetails.principal);
-            curr.set( 'rate', loanDetails.rate);
-            curr.set( 'term', loanDetails.term);
-        }
+    const clearLoan = () =>{
+       setCurrentLoan(undefined);
+    }
 
-        this.setState({ currentLoan:curr});
+    const saveLoan = (loanDetails) =>{
+        let curr= null
+        if(!setCurrentLoan(loans[idx])){
+                        curr = new Loan(loanDetails);
+                        loans = addLoans(loans.concat(curr));
+                    }
+                    else{
+                        curr = currentLoan;
+                        curr.set( 'title', loanDetails.title);
+                        curr.set( 'principal', loanDetails.principal);
+                        curr.set( 'rate', loanDetails.rate);
+                        curr.set( 'term', loanDetails.term);
+                    }
+            
+        //currentLoan = useState(curr);
     }
-    render(){
-        return(<div>
-            <div className="col-sm-6 col-xs-12 loan-control">
-                <LoanForm submitListener={this.saveLoan} resetListener={this.clearLoan} loan={this.state.currentLoan}/>
-            </div>
-            <div className="col-sm-6 col-xs-12 loan-display">
-                <LoanList clickListener={this.pickLoan} loans={this.state.loans}/>
-            </div>
-        </div>);
-    }
+    return(<div>
+          <div className="col-sm-6 col-xs-12 loan-control">
+              <LoanForm submitListener={saveLoan} resetListener={clearLoan} loan={currentLoan}/>
+          </div>
+          <div className="col-sm-6 col-xs-12 loan-display">
+              <LoanList clickListener={pickLoan} loans={loans}/>
+          </div>
+      </div>)
+    
 }
 
 
